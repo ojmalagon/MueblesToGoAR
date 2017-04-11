@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta content="width=device-width,initial-scale=1,maximum-scale=5,user-scalable=yes" name="viewport" />
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0"/>
+
+    <title></title>
+
+    <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+    <script src="architect://architect.js"></script>
+    <script type="text/javascript" src="js/ade.js"></script>
+
+    <link rel="stylesheet" href="css/default.css" />
+  </head>
+  <body>
+    <div id="loadingMessage" class="info">Loading ...</div>
+    <div id="gestureContainer" class="container">
+      <div id="help_panel">
+        <a class="close_button" id="close_x"></a>
+        <img src="images/arrows.png" id="arrows">
+        <p id="help_text">Swipe up, down, left or right to move or rotate your selected object. Press the <b>ROTATE / MOVE</b> button to toggle between the two. Use the <b>RAISE</b> and <b>LOWER</b> buttons to move the object up and down. Touch the X to begin!</p>
+      </div>
+    </div>
+    <div id="rotate_translate_toggle"><a class="myButton" id="rotate_translate_anchor">ROTATE / MOVE</a></div>
+    <div id="raise_or_lower">
+      <a class="myButton" id="raise_anchor">RAISE</a>
+      <a class="myButton" id="lower_anchor">LOWER</a>
+    </div>
+    <div id="help_button"><a class="myButton" id="help_button_anchor">HELP</a></div>
+    <script src="file:///sdcard/Android/data/com.example.deon.furnituar/cache/output.js"></script>
+    <script src="js/renderFurniture.js"></script>
+  </body>
+</html>

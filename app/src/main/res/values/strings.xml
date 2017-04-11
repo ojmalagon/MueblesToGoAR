@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MueblesToGoAR</string>
+    <string name="location_fetching">Trying to find out where you are</string>
+    <string name="compass_accuracy_low">Please re-calibrate compass by waving your device in a figure 8 motion.</string>
 </resources>
