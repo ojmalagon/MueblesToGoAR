@@ -116,6 +116,7 @@ public class ViewAR  extends AbstractArchitectCamActivity implements SensorEvent
 
     @Override
     public String getARchitectWorldPath() {
+        //return "file:////android_asset/render/index.html";
         return "file:////android_asset/render/index.html";
     }
 
@@ -175,7 +176,8 @@ public class ViewAR  extends AbstractArchitectCamActivity implements SensorEvent
 
     @Override
     public String getWikitudeSDKLicenseKey() {
-        return "0z/8Fwhl7tOjD92txxhdpofO2BsLowXtjo/AeS8Lp7VSVMBvTwPnRjNY0iZAEwpjN63AuXGIr7GyzlfBRd4dcut47aylf5PrVQds/t3AEszAcYPqpHjt2bAPhMZBWv87F8gLH+67p1GdxOzsIxdAQbOMPskg5oCyUibqd3AOAp1TYWx0ZWRfXxthfZ8BBFZf51jzGmPm/as0jG5ygU0Uw0P8ASobBoJgG1w8NjjO3AkTCzVyoeb7zftf2RZlLRhvEeMlsDENRvbSTakH/zJN1dysXJ/sbn0th6yi/GUYjDLSjLI8xlzb8Fj0OSZ+pqgPKT6Jbkoc+nhKcmDZrGFJXalrpXoOpO+mFyyz64akFdax8MwpNgFnvPmK+fJmwRYFHThIB81YVNvRN+pzk0/r3d8NjT6Xy40NeVqFfEOmznRc7EyrHWrHUrdJ+Ng1/GoasLPBokN3RBkxF0VblZ5j6dFBMowfHZr62J0/QDjQz4nB+E392SEDaxVEu76EQdbf1MFkRUixTWIpngNGUF1goWddEM0rGyb2SEqZAjhhWZlvuHVwlcRm/ZaRQsjnX12yKACSViXqopVtRnFkCZMgy0d4E8LDzdI2fitk2EReY4cPyK8q3SXwdPpUvl9s0c41DNehGO54oQoY53VDWHzUgMHSSo7I/aBDkfa3cmQwT4s=";
+        //return "0z/8Fwhl7tOjD92txxhdpofO2BsLowXtjo/AeS8Lp7VSVMBvTwPnRjNY0iZAEwpjN63AuXGIr7GyzlfBRd4dcut47aylf5PrVQds/t3AEszAcYPqpHjt2bAPhMZBWv87F8gLH+67p1GdxOzsIxdAQbOMPskg5oCyUibqd3AOAp1TYWx0ZWRfXxthfZ8BBFZf51jzGmPm/as0jG5ygU0Uw0P8ASobBoJgG1w8NjjO3AkTCzVyoeb7zftf2RZlLRhvEeMlsDENRvbSTakH/zJN1dysXJ/sbn0th6yi/GUYjDLSjLI8xlzb8Fj0OSZ+pqgPKT6Jbkoc+nhKcmDZrGFJXalrpXoOpO+mFyyz64akFdax8MwpNgFnvPmK+fJmwRYFHThIB81YVNvRN+pzk0/r3d8NjT6Xy40NeVqFfEOmznRc7EyrHWrHUrdJ+Ng1/GoasLPBokN3RBkxF0VblZ5j6dFBMowfHZr62J0/QDjQz4nB+E392SEDaxVEu76EQdbf1MFkRUixTWIpngNGUF1goWddEM0rGyb2SEqZAjhhWZlvuHVwlcRm/ZaRQsjnX12yKACSViXqopVtRnFkCZMgy0d4E8LDzdI2fitk2EReY4cPyK8q3SXwdPpUvl9s0c41DNehGO54oQoY53VDWHzUgMHSSo7I/aBDkfa3cmQwT4s=";
+        return "DSTFpFW4YWjPRJA1Rz/2BnNEawePW1XR3kU0hG1pcSHGVvjmht5tECzauqgJWYVDa6vBkV0ZH8m24eswHnrN4F9fEAV1sdZKZMXIoDtcIyoZUkabVeX2A24r3BEviVHOfzP8twfCdaCwrVAboYLMpI0VxnfIxVj5VBlYx8FdJqlTYWx0ZWRfX7pSUJYB/ytSPrW4QpeJyI5VJeY6a7Yd38ehFEBX5Id1NsZZFvHYTEZgo+s4WEVgLr9fX/qs5/rh2Dnhib3+Jvu17D0fqMfGeIcILKmmg/oWtlQZavnZwXK2Z/JPs3gXxqWwsvQyE+90K/r72KMMAVFKovXVj9DCn/WiRMtRs5fCE5DeLe7JXnA4lACRadlrUjdRFEixuQeYRLu+v9pwEwbzjn39ssR/bpxLEBuK60Ejda7ivBn43zSO5XuKIqB+jyG+iwOWXJ4wnVjzR7gvdLh202NitQ1KpAMNqtiZqYv9k6xoS/smxfJUR4Gql11cfTO8zcAy4p3XQ+jgUgHeQsk3o13OAxCBzIiRog1hB7U30g/9F8t+LAniUHbqhkzPyi6EjtgRZnyJmUC6EyZuGCs/TfIIRD6ewUh5LSnya8eLrh20Iq1iDB3+zFLG9IX53gBq8NC6+tU/upIWA4i2vWdm/NcwTu1Xj+3zODgbeY4gfda/vsh5t90=";
     }
 
     @Override
@@ -236,7 +238,7 @@ public class ViewAR  extends AbstractArchitectCamActivity implements SensorEvent
                 float diffAzimuth = newAzimuth - intent.getExtras().getFloat("azimuth");
                 azimuth = diffAzimuth;
                 String[] callJSArg = {Float.toString(azimuth)};
-                callJavaScript("World.setBearingExternally", callJSArg);
+                //callJavaScript("World.setBearingExternally", callJSArg);
                 try {
                     writeBearingToJSON(azimuth);
                 } catch (IOException e) {

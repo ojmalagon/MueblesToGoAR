@@ -1,233 +1,225 @@
-console.log('selection: ' + selectionData.selection);
-console.log('y-bearing: ' + selectionData.bearingN);
-console.log('x-bearing: ' + selectionData.bearingE);
+var defaultScaleValue = 0.045;
+var defaultRotationValue = 0;
 
+var rotationValues = [];
+var scaleValues = [];
+
+var allCurrentModels = [];
+
+var oneFingerGestureAllowed = false;
+
+// this global callback can be utilized to react on the transition from and to 2
+// finger gestures; specifically, we disallow the drag gesture in this case to ensure an
+// intuitive experience
+AR.context.on2FingerGestureStarted = function() {
+    oneFingerGestureAllowed = false;
+}
 
 var World = {
-	loaded: false,
-	rotating: false,
-	jsonData: undefined,
-	lastTouch: {
-		x: 0,
-		y: 0
-	},
-	rotateOrTranslate: 'translate',
-	interactionContainer: 'gestureContainer',
-	previousOrientation: undefined,
-	helpMessageShows: true,
-	externalBearing: 0,
+    modelPaths: ["assets/models/clock.wt3", "assets/models/couch.wt3", "assets/models/officechair.wt3", "assets/models/table.wt3", "assets/models/trainer.wt3"],
+    /*
+        requestedModel is the index of the next model to be created. This is necessary because we have to wait one frame in order to pass the correct initial position to the newly created model.
+        initialDrag is a boolean that serves the purpose of swiping the model into the scene. In the moment that the model is created, the drag event has already started and will not be caught by the model, so the motion has to be carried out by the tracking plane.
+        lastAddedModel always holds the newest model in allCurrentModels so that the plane knows which model to apply the motion to.
+    */
+    requestedModel: -1,
+    initialDrag: false,
+    lastAddedModel: null,
 
-	init: function initFn(filename) {
-        alert("ssss"+filename);
-		this.createModelAtLocation(filename);
+    init: function initFn(filename) {
+        this.createOverlays(filename);
+    },
 
-	},
+    createOverlays: function createOverlaysFn(filename) {
+        var crossHairsRedImage = new AR.ImageResource("assets/crosshairs_red.png");
+        var crossHairsRedDrawable = new AR.ImageDrawable(crossHairsRedImage, 1.0);
 
-	createModelAtLocation: function createModelAtLocationFn(filename) {
+        var crossHairsBlueImage = new AR.ImageResource("assets/crosshairs_blue.png");
+        var crossHairsBlueDrawable = new AR.ImageDrawable(crossHairsBlueImage, 1.0);
 
-		var location = new AR.RelativeLocation(null, selectionData.bearingN * 50, selectionData.bearingE * 50, 0);
-		World.model3DObj = new AR.Model('models/'+filename + '.wt3', {
-			onLoaded: this.worldLoaded,
-			scale: {
-				x: 1,
-				y: 1,
-				z: 1
-			}
-		});
-
-        var indicatorImage = new AR.ImageResource("images/indi.png");
-        var imgRotate = new AR.ImageResource("images/rotateButton.png");
-
-        var indicatorDrawable = new AR.ImageDrawable(indicatorImage, 0.1, {
-            verticalAnchor: AR.CONST.VERTICAL_ANCHOR.TOP
+        this.tracker = new AR.InstantTracker({
+            onChangedState:  function onChangedStateFn(state) {
+                // react to a change in tracking state here
+            },
+            deviceHeight: 1.0
         });
-
-		var obj = new AR.GeoObject(location, {
+        
+        this.instantTrackable = new AR.InstantTrackable(this.tracker, {
             drawables: {
-               cam: [this.model3DObj],
-//               indicator: [indicatorDrawable]
+                cam: crossHairsBlueDrawable,
+                initialization: crossHairsRedDrawable
+            },
+            onTrackingStarted: function onTrackingStartedFn() {
+                // do something when tracking is started (recognized)
+            },
+            onTrackingStopped: function onTrackingStoppedFn() {
+                // do something when tracking is stopped (lost)
+            },
+            onTrackingPlaneClick: function onTrackingPlaneClickFn(xPos, yPos) {
+                // react to a the tracking plane being clicked here
+            },
+            onTrackingPlaneDragBegan: function onTrackingPlaneDragBeganFn(xPos, yPos) {
+                World.updatePlaneDrag(xPos, yPos);
+            },
+            onTrackingPlaneDragChanged: function onTrackingPlaneDragChangedFn(xPos, yPos) {
+                World.updatePlaneDrag(xPos, yPos);
+            },
+            onTrackingPlaneDragEnded: function onTrackingPlaneDragEndedFn(xPos, yPos) {
+                World.updatePlaneDrag(xPos, yPos);
+                World.initialDrag = false;
             }
         });
 
-        World.addInteractionEventListener();
-	},
-
-	worldLoaded: function worldLoadedFn() {
-		World.loaded = true;
-		var e = document.getElementById('loadingMessage');
-		e.parentElement.removeChild(e);
-	},
-
-	toggleHelpMessage: function() {
-		console.log('toggleHelpMessage called');
-		var helpMessageElement = document.getElementById('help_panel');
-
-		if(World.helpMessageShows){
-			helpMessageElement.style.display = 'none';
-		}
-		else{
-			helpMessageElement.style.display = 'block';
-		}
-
-		World.helpMessageShows = !(World.helpMessageShows);
-		console.log('helpMessageShows: ' + World.helpMessageShows);
-		World.addInteractionEventListener();
-	},
-
-	handleTouchStart: function handleTouchStartFn(event) {
-		World.swipeAllowed = true;
-
-		World.lastTouch.x = event.touches[0].clientX;
-		World.lastTouch.y = event.touches[0].clientY;
-
-		event.preventDefault();
-	},
-
-	handleTouchMove: function handleTouchMoveFn(event) {
-
-//		console.log('handleTouchMove has been called!')
-		if (World.swipeAllowed){
-			var touch = {
-				x: event.touches[0].clientX,
-				y: event.touches[0].clientY
-			};
-			var movement = {
-				x: 0,
-				y: 0
-			};
-			var realignedMovement = World.calculateMovement(touch);
-
-			movement.x = realignedMovement.x // World.calculateXMovement(touch); // (World.lastTouch.x - touch.x) * -1;
-			movement.y = realignedMovement.y // World.calculateYMovement(touch); // (World.lastTouch.y - touch.y) * -1;
-
-			if(World.rotateOrTranslate === 'translate'){
-
-				World.model3DObj.translate.x += (movement.x * 0.25);
-//				console.log('y changing by ' + (movement.y * 0.25))
-				World.model3DObj.translate.z += (movement.y * 0.25);
-
-			} else{
-
-				World.model3DObj.rotate.heading += (movement.x * 0.3);
-				World.model3DObj.rotate.tilt += (movement.y * 0.3);
-			}
-
-			World.lastTouch.x = touch.x;
-			World.lastTouch.y = touch.y;
-		}
-
-		event.preventDefault();
+        World.setupEventListeners()
     },
 
-    raiseButton: function() {
-
-    	World.model3DObj.translate.y += 1.2;
-    	console.log('translate Y: ' + World.model3DObj.translate.y)
-
+    setupEventListeners: function setupEventListenersFn() {
+        document.getElementById("tracking-model-button-clock").addEventListener('touchstart', function(ev){
+            World.requestedModel = 0;
+        }, false);
+        document.getElementById("tracking-model-button-couch").addEventListener('touchstart', function(ev){
+            World.requestedModel = 1;
+        }, false);
+        document.getElementById("tracking-model-button-chair").addEventListener('touchstart', function(ev){
+            World.requestedModel = 2;
+        }, false);
+        document.getElementById("tracking-model-button-table").addEventListener('touchstart', function(ev){
+            World.requestedModel = 3;
+        }, false);
+        document.getElementById("tracking-model-button-trainer").addEventListener('touchstart', function(ev){
+            World.requestedModel = 4;
+        }, false);
     },
 
-	lowerButton: function() {
+    updatePlaneDrag: function updatePlaneDragFn(xPos, yPos) {
 
-		World.model3DObj.translate.y -= 1.2;
-		console.log('translate Y: ' + World.model3DObj.translate.y)
+        if (World.requestedModel >= 0) {
+            World.addModel(World.requestedModel, xPos, yPos);
+            World.requestedModel = -1;
+            World.initialDrag = true;
+        }
 
-	},
+        if (World.initialDrag) {
+            lastAddedModel.translate = {x:xPos, y:yPos};
+        }
+    },
 
-    rotateTranslateToggle: function() {
+    changeTrackerState: function changeTrackerStateFn() {
+        
+        if (this.tracker.state === AR.InstantTrackerState.INITIALIZING) {
+            
+            var els = [].slice.apply(document.getElementsByClassName("tracking-model-button-inactive"));
+            for (var i = 0; i < els.length; i++) {
+                console.log(els[i]);
+                els[i].className = els[i].className = "tracking-model-button";
+            }
+            
+            document.getElementById("tracking-start-stop-button").src = "assets/buttons/stop.png";
+            document.getElementById("tracking-height-slider-container").style.visibility = "hidden";
+            
+            this.tracker.state = AR.InstantTrackerState.TRACKING;
+        } else {
+            
+            var els = [].slice.apply(document.getElementsByClassName("tracking-model-button"));
+            for (var i = 0; i < els.length; i++) {
+                console.log(els[i]);
+                els[i].className = els[i].className = "tracking-model-button-inactive";
+            }
+            
+            document.getElementById("tracking-start-stop-button").src = "assets/buttons/start.png";
+            document.getElementById("tracking-height-slider-container").style.visibility = "visible";
+            
+            this.tracker.state = AR.InstantTrackerState.INITIALIZING;
+        }
+    },
+    
+    changeTrackingHeight: function changeTrackingHeightFn(height) {
+        this.tracker.deviceHeight = parseFloat(height);
+    },
+    
+    addModel: function addModelFn(pathIndex, xpos, ypos) {
+        if (World.isTracking()) {
+            var modelIndex = rotationValues.length;
+            World.addModelValues();
 
-		if(World.rotateOrTranslate === 'translate'){
-			World.rotateOrTranslate = 'rotate'
-			console.log('rotateOrTranslate: ' + World.rotateOrTranslate)
-		} else{
-			World.rotateOrTranslate = 'translate'
-			console.log('rotateOrTranslate: ' + World.rotateOrTranslate)
-		}
-	},
+            var model = new AR.Model(World.modelPaths[pathIndex], {
+                scale: {
+                    x: defaultScaleValue,
+                    y: defaultScaleValue,
+                    z: defaultScaleValue
+                },
+                translate: {
+                    x: xpos,
+                    y: ypos
+                },
+                // We recommend only implementing the callbacks actually needed as they will
+                // cause calls from native to JavaScript being invoked. Especially for the
+                // frequently called changed callbacks this should be avoided. In this
+                // sample all callbacks are implemented simply for demonstrative purposes.
+                onDragBegan: function(x, y) {
+                    oneFingerGestureAllowed = true;
+                },
+                onDragChanged: function(relativeX, relativeY, intersectionX, intersectionY) {
+                    if (oneFingerGestureAllowed) {
+                        // We recommend setting the entire translate property rather than
+                        // its individual components as the latter would cause several
+                        // call to native, which can potentially lead to performance
+                        // issues on older devices. The same applied to the rotate and 
+                        // scale property
+                        this.translate = {x:intersectionX, y:intersectionY};
+                    }
+                },
+                onDragEnded: function(x, y) {
+                    // react to the drag gesture ending
+                },
+                onRotationBegan: function(angleInDegrees) {
+                    // react to the rotation gesture beginning
+                },
+                onRotationChanged: function(angleInDegrees) {
+                    this.rotate.z = rotationValues[modelIndex] - angleInDegrees;
+                },
+                onRotationEnded: function(angleInDegrees) {
+                   rotationValues[modelIndex] = this.rotate.z
+                },
+                onScaleBegan: function(scale) {
+                    // react to the scale gesture beginning
+                },
+                onScaleChanged: function(scale) {
+                    var scaleValue = scaleValues[modelIndex] * scale;
+                    this.scale = {x: scaleValue, y: scaleValue, z: scaleValue};
+                },
+                onScaleEnded: function(scale) {
+                    scaleValues[modelIndex] = this.scale.x;
+                }
+            })
 
-	calculateAxes: function() {
-		var landscape = 90;
+            allCurrentModels.push(model);
+            lastAddedModel = model;
+            this.instantTrackable.drawables.addCamDrawable(model);
+        }
+    },
 
-		if(window.orientation === landscape) {
-            World.isFlipXOn = true;
-            World.isFlipYOn = true;
-		} else {
-			World.isFlipXOn = false;
-			World.isFlipYOn = false;
-		}
-	},
+    isTracking: function isTrackingFn() {
+        return (this.tracker.state === AR.InstantTrackerState.TRACKING);
+    },
 
-	calculateMovement: function(touch) {
-		var realignedMovement = { 'x': 0, 'y': 0 };
-		var diffX = World.lastTouch.x - touch.x;
-		var diffY = World.lastTouch.y - touch.y;
-//		var bearing = World.jsonData.bearing;
-		var bearing = World.externalBearing;
-		console.log("calculateMovement.bearing: " + bearing);
-		realignedMovement.x = diffX * Math.cos(bearing) + diffY * Math.sin(bearing);
-		realignedMovement.y = diffY * Math.cos(bearing) + diffX * Math.sin(bearing);
-		realignedMovement.x = -realignedMovement.x;
-		realignedMovement.y = -realignedMovement.y;
-		console.log("diffX: " + diffX + "; newX: " + realignedMovement.x);
-		console.log("diffY: " + diffY + "; newY: " + realignedMovement.y);
-		return realignedMovement;
-	},
+    addModelValues: function addModelValuesFn() {
+        rotationValues.push(defaultRotationValue);
+        scaleValues.push(defaultScaleValue);
+    },
 
-	calculateXMovement: function(touch) {
-		if(World.isFlipXOn) { return (World.lastTouch.y - touch.y) * -1; }
-        return (World.lastTouch.x - touch.x) * -1;
-	},
+    resetModels: function resetModelsFn() {
+        for (var i = 0; i < allCurrentModels.length; i++) {
+            this.instantTrackable.drawables.removeCamDrawable(allCurrentModels[i]);
+        }
+        allCurrentModels = [];
+        World.resetAllModelValues();
+    },
 
-	calculateYMovement: function(touch) {
-		if(World.isFlipYOn) { return (World.lastTouch.x - touch.x) * -1; }
-			return (World.lastTouch.y - touch.y) * -1;
-	},
-
-	checkOrientation: function() {
-		if(window.orientation !== previousOrientation) {
-			previousOrientation = window.orientation
-			World.calculateAxes();
-		}
-	},
-
-	setBearingExternally: function(bearing) {
-		World.externalBearing = bearing;
-//		console.log("World.externalBearing: " + World.externalBearing);
-	},
-
-	addInteractionEventListener: function addInteractionEventListenerFn() {
-		document.getElementById("rotate_translate_anchor").addEventListener("click", World.rotateTranslateToggle);
-		document.getElementById("raise_anchor").addEventListener("click", World.raiseButton);
-		document.getElementById("lower_anchor").addEventListener("click", World.lowerButton);
-		window.addEventListener("resize", World.checkOrientation, false);
-		window.addEventListener("orientationchange", World.checkOrientation, false);
-		document.getElementById("help_button_anchor").addEventListener("click", World.toggleHelpMessage);
-		if(!World.helpMessageShows){
-			document.getElementById(World.interactionContainer).addEventListener('touchstart', World.handleTouchStart, false);
-            document.getElementById(World.interactionContainer).addEventListener('touchmove', World.handleTouchMove, false);
-		}
-		if(World.helpMessageShows){
-			document.getElementById("close_x").addEventListener("click", World.toggleHelpMessage);
-			document.getElementById(World.interactionContainer).removeEventListener('touchstart', World.handleTouchStart, false);
-            document.getElementById(World.interactionContainer).removeEventListener('touchmove', World.handleTouchMove, false);
-		}
-	}
-
+    resetAllModelValues: function resetAllModelValuesFn() {
+        rotationValues = [];
+        scaleValues = [];
+    }
 };
 
-//World.init();
-
-function readJSON() {
-	$.getJSON("http://localhost:43770")
-		.done(function(data) { World.jsonData = data;
-			console.log("success, data.bearing: " + data.bearing);
-		}).fail(function(jqxhr, textStatus, error) {
-			var err = textStatus + ", " + error;
-			console.log(err);
-		});
-}
-//$(document).ready(function() {
-//    setInterval(function() {
-//        readJSON();
-//    }, 250);
-//});
-
+World.init();
