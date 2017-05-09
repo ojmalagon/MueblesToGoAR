@@ -22,8 +22,9 @@ android {
     packagingOptions {
         exclude 'META-INF/LGPL2.1'
         exclude 'META-INF/LICENSE'
-
+        exclude 'META-INF/NOTICE'
     }
+    useLibrary  'org.apache.http.legacy'
 }
 
 dependencies {
@@ -34,11 +35,12 @@ dependencies {
     compile(name: 'wikitudesdk', ext: 'aar')
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
     compile 'org.codehaus.jackson:jackson-mapper-lgpl:1.9.13'
+    testCompile 'junit:junit:4.12'
+    compile 'com.github.danysantiago:sendgrid-android:1'
 }
 repositories {
-    flatDir{
+    flatDir {
         dirs 'libs'
     }
 

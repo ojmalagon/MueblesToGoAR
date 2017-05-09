@@ -164,6 +164,10 @@ public class ViewAR  extends AbstractArchitectCamActivity implements SensorEvent
                         }
                     });
                 }
+                else if("buy".equalsIgnoreCase(invokedUri.getHost())){
+                    Intent i = new Intent(getApplicationContext(),BuyFormActivity.class);
+                    startActivity(i);
+                }
                 return true;
             }
         };
@@ -281,5 +285,10 @@ public class ViewAR  extends AbstractArchitectCamActivity implements SensorEvent
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
                 break;
         }
+    }
+
+    public void test(){
+        String a = "";
+        a="zz";
     }
 }

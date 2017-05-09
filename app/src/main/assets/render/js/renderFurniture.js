@@ -213,6 +213,10 @@ var World = {
         allCurrentModels = [];
         World.resetAllModelValues();
     },
+    buyActivity: function buyActivityFn() {
+
+            document.location = "architectsdk://buy";
+        },
 
     resetAllModelValues: function resetAllModelValuesFn() {
         rotationValues = [];

@@ -34,6 +34,7 @@
         </activity>
         <activity android:name=".ViewAR"
             android:configChanges="screenSize|orientation"></activity>
+        <activity android:name=".BuyFormActivity"></activity>
     </application>
 
 </manifest>
