@@ -10,6 +10,43 @@
     android:paddingLeft="16dp"
     tools:context=".ViewAR">
 
+    <LinearLayout
+        android:id="@+id/circle"
+        android:layout_width="336dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/circleangle"
+        android:padding="5dp"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="8dp">
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="1dp">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/angle2"
+                />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/go"
+                android:paddingLeft="3dp"
+                android:layout_gravity="center"
+                />
+        </FrameLayout>
+        <customfonts.MyTextView
+            android:id="@+id/pasoMain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/paso3"
+            android:textSize="18dp"
+            android:textColor="#fff"
+            android:layout_gravity="center"
+            android:layout_marginLeft="16dp"/>
+    </LinearLayout>
     <!--<ImageView
         android:id="@+id/imageView2"
         android:layout_width="wrap_content"
@@ -17,6 +54,6 @@
         app:srcCompat="@mipmap/ic_launcher"
         tools:layout_editor_absoluteX="168dp"
         tools:layout_editor_absoluteY="231dp" />-->
-    <com.wikitude.architect.ArchitectView android:id="@+id/architectView" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+    <com.wikitude.architect.ArchitectView android:id="@+id/architectView" android:layout_marginTop="50dp" android:layout_width="fill_parent" android:layout_height="fill_parent" />
 
 </android.support.constraint.ConstraintLayout>

@@ -113,9 +113,11 @@ var World = {
             }
             
             document.getElementById("tracking-start-stop-button").src = "assets/buttons/stop.png";
-            document.getElementById("tracking-height-slider-container").style.visibility = "hidden";
-            
+            //document.getElementById("tracking-height-slider-container").style.visibility = "hidden";
+            document.location = "architectsdk://start";
             this.tracker.state = AR.InstantTrackerState.TRACKING;
+
+
         } else {
             
             var els = [].slice.apply(document.getElementsByClassName("tracking-model-button"));
@@ -125,7 +127,7 @@ var World = {
             }
             
             document.getElementById("tracking-start-stop-button").src = "assets/buttons/start.png";
-            document.getElementById("tracking-height-slider-container").style.visibility = "visible";
+            //document.getElementById("tracking-height-slider-container").style.visibility = "visible";
             
             this.tracker.state = AR.InstantTrackerState.INITIALIZING;
         }
@@ -137,6 +139,7 @@ var World = {
     
     addModel: function addModelFn(pathIndex, xpos, ypos) {
         if (World.isTracking()) {
+        document.location = "architectsdk://newModel";
             var modelIndex = rotationValues.length;
             World.addModelValues();
 

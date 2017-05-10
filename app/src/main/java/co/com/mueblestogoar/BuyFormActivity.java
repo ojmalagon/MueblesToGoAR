@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -21,20 +23,21 @@ import java.io.IOException;
 
 public class BuyFormActivity extends AppCompatActivity  {
 
-    private Button sendButton;
+    private TextView sendButton;
     private static final String SENDGRID_USERNAME = "";
     private static final String SENDGRID_PASSWORD = "";
     private static final int ADD_ATTACHMENT = 0;
-    private EditText emailText;
-    private EditText commentText;
+    private TextView emailText;
+    private TextView commentText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_buy_form);
-        sendButton = (Button) findViewById(R.id.sendBt);
-        emailText =  (EditText) findViewById(R.id.txtEmail);
-        commentText =  (EditText) findViewById(R.id.txtComentario);
+        //sendButton = (Button) findViewById(R.id.);
+        sendButton = (TextView)findViewById(R.id.send);
+        emailText =  (TextView) findViewById(R.id.mail);
+        commentText =  (TextView) findViewById(R.id.comment);
         sendButton.setOnClickListener(new View.OnClickListener() {
 
             @Override

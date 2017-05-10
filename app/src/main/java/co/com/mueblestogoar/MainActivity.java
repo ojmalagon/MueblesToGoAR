@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.File;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private SensorManager mSensorManager;
     private float azimuth;
     private int index;
+    LinearLayout circle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
         data.LoadData();
 
         gw = (GridView) findViewById(R.id.grPpal);
+        circle = (LinearLayout)findViewById(R.id.circle);
+
         //getIntent().get
 
         this.index = -1;
@@ -45,16 +49,16 @@ public class MainActivity extends AppCompatActivity {
         }
         gw.setAdapter( new GridAdapter(data,this.index));
 
-        gw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+       gw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if( index==-1){
+               /* if( index==-1){
                     Intent i = new Intent(getApplicationContext(),MainActivity.class);
                     i.putExtra("index",position);
                     startActivity(i);
                 }
-                else {
+                else {*/
                     Intent i = new Intent(getApplicationContext(),ViewAR.class);
                     String p = "";//Data.ITEM_NAMES[position].toString();
                     float orientation[] = new float[3];
@@ -64,7 +68,24 @@ public class MainActivity extends AppCompatActivity {
                     i.putExtra("model",p);
                     i.putExtra("azimuth", azimuth);
                     startActivity(i);
-                }
+                /*}*/
+
+            }
+        });
+
+        circle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent i = new Intent(getApplicationContext(),ViewAR.class);
+                String p = "";//Data.ITEM_NAMES[position].toString();
+                float orientation[] = new float[3];
+                float R[] = new float[9];
+                SensorManager.getOrientation(R, orientation);
+                azimuth = (orientation[0] < 0) ? 2 * (float)Math.PI + orientation[0] : orientation[0];
+                i.putExtra("model",p);
+                i.putExtra("azimuth", azimuth);
+                startActivity(i);
 
             }
         });
@@ -130,6 +151,8 @@ public class MainActivity extends AppCompatActivity {
                 tv.setText(DataGrid.getCatalog().get(position).getName());
             }
             else{
+                TextView pasoMain = (TextView)  findViewById(R.id.pasoMain);
+                pasoMain.setText(R.string.paso3);
                 //return DataGrid.getCatalog().get(index).getItems().get(position).getId();
                 iv.setImageResource(DataGrid.getCatalog().get(index).getItems().get(position).getImage());
                 tv.setText(DataGrid.getCatalog().get(index).getItems().get(position).getName());

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/img">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background">
+        <customfonts.MyTextView
+            android:id="@+id/sin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="¡Empecemos...! >>>"
+            android:textSize="28dp"
+            android:textColor="#54abee"
+            android:gravity="center"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="45dp"
+            />
+        <TextView
+            android:background="@drawable/togologo"
+            android:id="@+id/imac"
+            android:layout_width="105dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            />
+        <customfonts.MyTextView
+            android:id="@+id/account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="¿Estás listo?"
+            android:textSize="16dp"
+            android:textColor="#c4c5c9"
+            android:gravity="center"
+            android:layout_above="@id/sin"
+            android:paddingBottom="16dp"
+            />
+        <LinearLayout
+            android:id="@+id/circle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circleangle"
+            android:padding="5dp"
+            android:orientation="horizontal">
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="1dp">
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/angle2"
+                    />
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/go"
+                    android:paddingLeft="3dp"
+                    android:layout_gravity="center"
+                    />
+            </FrameLayout>
+            <customfonts.MyTextView
+                android:id="@+id/signupforfree"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/paso1"
+                android:textSize="18dp"
+                android:textColor="#fff"
+                android:layout_gravity="center"
+                android:layout_marginLeft="16dp"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+</FrameLayout>

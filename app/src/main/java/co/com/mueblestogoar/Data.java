@@ -38,15 +38,33 @@ public class Data {
         //Initi catalog & ítems
 
         ObjectMapper mapper = new ObjectMapper();
+        catalog = new ArrayList<Category>();
+        itemsCategory = new ArrayList<Item>();
 
-
-        String a = "{\"id\":1,\"name\":\"Salas\",\"image\":"+R.drawable.salacategory+","+
-                    "\"items\":[{\"id\":1,\"description\":\"SSSSSSSSS\",\"name\":\"Sofá cama\",\"dimensions\":\"1.70 X 1.20 x 0.70 cms\", \"image\":"+R.drawable.sofacama1+"},{\"id\":2,\"description\":\"SSSSSSSSS\",\"name\":\"Sofá cama extendido\",\"dimensions\":\"1.70 X 1.20 x 0.70 cms\", \"image\":"+R.drawable.cama1+"} ]" +
+        String a = "{\"id\":1,\"name\":\"Salas\",\"image\":"+R.drawable.salacategory1+","+
+                    "\"items\":[{\"id\":1,\"description\":\"SSSSSSSSS\",\"name\":\"Experimenta\",\"dimensions\":\"1.70 X 1.20 x 0.70 cms\", \"image\":"+R.drawable.arview+"} ]" +
                    "}";
         Category cat=null;
         try
         {
-             cat =  mapper.readValue(a, Data.Category.class);
+            a = "{\"id\":1,\"name\":\"Sofás\",\"image\":"+R.drawable.salacategory1+"}";
+            cat =  mapper.readValue(a, Data.Category.class);
+            catalog.add(cat);
+            a = "{\"id\":2,\"name\":\"Mesas\",\"image\":"+R.drawable.mesacategory+"}";
+            cat =  mapper.readValue(a, Data.Category.class);
+            catalog.add(cat);
+            a = "{\"id\":3,\"name\":\"Comedores\",\"image\":"+R.drawable.comedorcategory+"}";
+            cat =  mapper.readValue(a, Data.Category.class);
+            catalog.add(cat);
+            a = "{\"id\":4,\"name\":\"Camas\",\"image\":"+R.drawable.camacategory+"}";
+            cat =  mapper.readValue(a, Data.Category.class);
+            catalog.add(cat);
+            a = "{\"id\":5,\"name\":\"Sillas\",\"image\":"+R.drawable.sillacategory+"}";
+            cat =  mapper.readValue(a, Data.Category.class);
+            catalog.add(cat);
+            a = "{\"id\":6,\"name\":\"Escritorios\",\"image\":"+R.drawable.escritoriocategory+"}";
+            cat =  mapper.readValue(a, Data.Category.class);
+            catalog.add(cat);
         }
         catch (JsonGenerationException e) {
             e.printStackTrace();
@@ -55,10 +73,9 @@ public class Data {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        catalog = new ArrayList<Category>();
-        itemsCategory = new ArrayList<Item>();
 
-        catalog.add(cat);
+
+
 /*
         //Category 1
         Category category = new Category();

@@ -16,6 +16,7 @@ import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wikitude.architect.ArchitectStartupConfiguration;
@@ -53,6 +54,9 @@ public class ViewAR  extends AbstractArchitectCamActivity implements SensorEvent
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[] {Manifest.permission.CAMERA}, 1);
+            }
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             }
         }
         super.onCreate(savedInstanceState);
@@ -167,6 +171,14 @@ public class ViewAR  extends AbstractArchitectCamActivity implements SensorEvent
                 else if("buy".equalsIgnoreCase(invokedUri.getHost())){
                     Intent i = new Intent(getApplicationContext(),BuyFormActivity.class);
                     startActivity(i);
+                }
+                else if("start".equalsIgnoreCase(invokedUri.getHost())){
+                    TextView pasoMain = (TextView)  findViewById(R.id.pasoMain);
+                    pasoMain.setText(R.string.paso4);
+                }
+                else if("newModel".equalsIgnoreCase(invokedUri.getHost())){
+                    TextView pasoMain = (TextView)  findViewById(R.id.pasoMain);
+                    pasoMain.setText(R.string.paso5);
                 }
                 return true;
             }

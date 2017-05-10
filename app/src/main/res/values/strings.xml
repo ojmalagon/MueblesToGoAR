@@ -1,5 +1,10 @@
 <resources>
-    <string name="app_name">MueblesToGoAR</string>
+    <string name="app_name">MueblesToGo</string>
     <string name="location_fetching">Trying to find out where you are</string>
     <string name="compass_accuracy_low">Please re-calibrate compass by waving your device in a figure 8 motion.</string>
+    <string name="paso1">Paso 1. Aquí inicia tu experiencia</string>
+    <string name="paso2">Paso 2. Selecciona la categoría</string>
+    <string name="paso3">Paso 3. Enfoca y haz clic en start</string>
+    <string name="paso4">Paso 4. Selecciona tus muebles</string>
+    <string name="paso5">Paso 5. Experimenta y compralos</string>
 </resources>

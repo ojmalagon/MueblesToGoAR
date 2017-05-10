@@ -1,21 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="co.com.mueblestogoar.MainActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/img">
 
-    <GridView
-        android:id="@+id/grPpal"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/circle"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:numColumns="auto_fit"
-        android:columnWidth="100dp"
-        android:horizontalSpacing="10dp"
-        android:verticalSpacing="10dp"
-        android:stretchMode="spacingWidthUniform"
-        tools:layout_editor_absoluteY="8dp"
-        tools:layout_editor_absoluteX="8dp"
-        />
-</android.support.constraint.ConstraintLayout>
+        android:background="@drawable/circleangle"
+        android:padding="5dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="0dp"
+        >
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="1dp">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/angle2"
+                />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/go"
+                android:paddingLeft="3dp"
+                android:layout_gravity="center"
+                />
+        </FrameLayout>
+        <customfonts.MyTextView
+            android:id="@+id/pasoMain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/paso2"
+            android:textSize="18dp"
+            android:textColor="#fff"
+            android:layout_gravity="center"
+            android:layout_marginLeft="16dp"/>
+    </LinearLayout>
+
+    <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="50dp"
+        android:background="@drawable/background">
+
+        <GridView
+            android:id="@+id/grPpal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numColumns="auto_fit"
+            android:columnWidth="100dp"
+            android:horizontalSpacing="10dp"
+            android:verticalSpacing="10dp"
+            android:stretchMode="spacingWidthUniform"
+            tools:layout_editor_absoluteY="8dp"
+            tools:layout_editor_absoluteX="8dp"
+            android:textAlignment="center"
+ />
+</RelativeLayout>
+</FrameLayout>
+
